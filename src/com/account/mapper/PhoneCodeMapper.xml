@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.account.mapper.PhoneCodeMapper">
+	<resultMap type="com.account.domain.PhoneCode" id="phoneCodeMap">
+		<id column="ID" property="id" jdbcType="INTEGER"/>
+		<result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+		<result column="CODE" property="code" jdbcType="INTEGER"/>
+		<result column="IP" property="ip" jdbcType="VARCHAR"/>
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="EXPIRED_TIME" property="expiredTime" jdbcType="TIMESTAMP"/>
+		<result column="USE_TIME" property="useTime" jdbcType="TIMESTAMP"/>
+		<result column="IS_USE_TIME" property="isUseTime" jdbcType="INTEGER"/>
+	</resultMap>
+	<!-- 最后一次申请记录 -->
+	<select id="getLastRequestByPhoneNum" parameterType="long" resultMap="phoneCodeMap">
+		<![CDATA[
+		SELECT * FROM PHONE_VERIFY_CODE WHERE PHONE=#{phone} AND CREATE_TIME IN(SELECT MAX(CREATE_TIME)FROM PHONE_VERIFY_CODE WHERE WHERE PHONE=#{phone})
+		ORDER BY ID DESC LIMIT 0,1
+		]]>
+	</select>
+	<!-- 查询 最后一次未使用的情况 -->
+	<select id="getLastUnusedRequestByPhoneNum" parameterMap="java.util.Map" resultMap="phoneCodeMap">
+		<![CDATA[
+			SELECT * FROM PHONE_VERIFY_CODE WHERE PHONE=#{phone} AND IS_USE_TIME=0 ORDER BY ID DESC LIMIT 0,1
+		]]>
+	</select>
+	<!-- 查询 每天同一手机的最大请求次数 -->
+	<select id="getEverydayPhoneRequest" parameterMap="java.util.Map" resultType="int">
+	<![CDATA[
+			SELECT COUNT(1) FROM PHONE_VERIFY_CODE WHERE DATE_FORMAT(CREATE_TIME,'%Y-%m-%d')=#{day} AND PHONE=#{phone}
+		]]>
+	</select>
+	<!-- 查询 每天同一ip的最大请求次数 -->
+	<select id="getEverydayIpRequest" parameterMap="java.util.Map" resultType="int">
+	<![CDATA[
+		SELECT COUNT(1) FROM PHONE_VERIFY_CODE WHERE DATE_FORMAT(CREATE_TIME,'%Y-%m-%d')=#{day} AND IP=#{ip}
+	]]>
+	</select>
+	<!-- 插入新的用户 -->
+	<insert id="insertPhoneCode" parameterType="com.account.domain.PhoneCode" useGeneratedKeys="true" keyProperty="id" 
+		flushCache="true">
+		<![CDATA[
+		INSERT INTO PHONE_VERIFY_CODE (PHONE,CODE,IP,CREATE_TIME, EXPIRED_TIME) 
+		VALUES(#{phone}, #{code}, #{ip},#{createTime}, #{expiredTime})
+		]]>	
+	</insert>
+	<!-- 更新手机验证码 -->
+	<update id="updatePhoneCode" parameterType="java.util.Map" flushCache="true">
+		UPDATE PHONE_VERIFY_CODE SET
+		<trim suffixOverrides=",">
+			<if test="useTime != null">
+				USE_TIME = #{useTime},
+			</if>
+			<if test="isUseTime != null">
+				IS_USE_TIME = #{isUseTime},
+			</if>
+		</trim>
+		WHERE ID =#{id}
+	</update>		
+</mapper>

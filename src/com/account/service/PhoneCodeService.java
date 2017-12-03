@@ -21,7 +21,7 @@ public interface PhoneCodeService {
 	/*每日同一ip的请求次数*/
 	int getEverydayIpRequest(String ip,Date day);
 	/*新的用户*/
-	void inertPhoneCode(PhoneCode user);
+	void insertPhoneCode(PhoneCode user);
 	/*更新手机验证码 */
 	void updatePhoneCode(Date useTime,int isUseTime,int id);
 	
