@@ -1,5 +1,6 @@
 package com.account.domain;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -8,29 +9,29 @@ public class PhoneCode {
  * 
  */
 	private Integer id;
-	private String phone;
-	private int code;
+	private BigInteger phone;
+	private Integer code;
 	private String ip;
 	private Timestamp createTime;
 	private Timestamp expiredTime;
 	private Timestamp useTime;
-	private Timestamp isUseTime;
+	private Integer isUseTime;
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getPhone() {
+	public BigInteger getPhone() {
 		return phone;
 	}
-	public void setPhone(String phone) {
+	public void setPhone(BigInteger phone) {
 		this.phone = phone;
 	}
-	public int getCode() {
+	public Integer getCode() {
 		return code;
 	}
-	public void setCode(int code) {
+	public void setCode(Integer code) {
 		this.code = code;
 	}
 	public String getIp() {
@@ -57,11 +58,11 @@ public class PhoneCode {
 	public void setUseTime(Timestamp useTime) {
 		this.useTime = useTime;
 	}
-	public Timestamp getIsUseTime() {
+	public Integer getIsUseTime() {
 		return isUseTime;
 	}
-	public void setIsUseTime(Timestamp isUseTime) {
+	public void setIsUseTime(Integer isUseTime) {
 		this.isUseTime = isUseTime;
 	}
-	
+
 }

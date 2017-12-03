@@ -14,46 +14,20 @@ import com.account.util.CheckPhoneFormat;
 public class PhoneCodeController {
 	@RequestMapping(value="",method=RequestMethod.POST)
 	public String phoneCodeVerify(@RequestParam(value="phone",required=false) String phone,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception{
-		/*
-		 * 判断是否是个手机号
-		 */
+		try{
+		// 判断是否是个手机号
 		if(CheckPhoneFormat.isNumLegal(phone)){
-			//是手机号
-			//记录最后一次发送的时间
+			//判断ip是否受限 获取来访者ip
+			String reqIp = CheckPhoneFormat.getIpAddr(request);
+			//从数据库中查询该ip
 			
 		}else{
 			//不是手机号
 			return "error";
 		}
-		/*最后一次发送的时间*/
-		
-		return "";
-	}
-	
-		/**
-	 * 获取客户端IP
-	 * 
-	 * @param request
-	 * @return
-	 */
-	public static String getIpAddr(HttpServletRequest request) {
-		String ip = request.getHeader("x-forwarded-for");
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
+		}catch (Exception e) {
+			new RuntimeException(e);
 		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("WL-Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getRemoteAddr();
-		}
-		
-		if (ip.indexOf(",")>0){
-			String IPS[]=ip.split(",");
-			System.out.println("There is a mutilple IP string in the request:"+ip);
-			return IPS[0].trim();  //handle the  multiple IPS string
-		}
-		
-		return ip;
+		return "null";
 	}
 }
