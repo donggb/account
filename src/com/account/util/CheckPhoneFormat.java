@@ -30,10 +30,8 @@ public class CheckPhoneFormat {
 			
 			if (ip.indexOf(",")>0){
 				String IPS[]=ip.split(",");
-				System.out.println("There is a mutilple IP string in the request:"+ip);
 				return IPS[0].trim();  
 			}
-			
 			return ip;
 		}
 }
