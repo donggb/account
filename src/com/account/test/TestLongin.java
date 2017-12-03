@@ -17,7 +17,7 @@ public class TestLongin extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String phone = req.getParameter("phone");
 		System.out.println("执行了"+phone);
-		System.out.println("aaa");
+		System.out.println("aab");
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
